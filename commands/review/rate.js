@@ -12,8 +12,6 @@ module.exports = {
 		.addNumberOption(option =>
 			option.setName('rating')
 				.setDescription('A numerical rating from 1 to 10')
-                .setMaxValue(10)
-                .setMinValue(0)
 				.setRequired(true))
 		.addStringOption(option =>
 			option.setName('review')

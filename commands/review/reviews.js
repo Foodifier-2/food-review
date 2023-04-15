@@ -42,4 +42,9 @@ module.exports = {
 					{ name: '18', value: '18' },
 					{ name: '19', value: '19' },
 					{ name: '20', value: '20' })),
+
+	async execute(interaction) {
+		await interaction.reply('Hi');
+		console.log(`User ${interaction.user.tag} used command ${interaction}`);
+	},
 };
