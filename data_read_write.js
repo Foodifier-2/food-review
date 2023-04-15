@@ -1,3 +1,4 @@
+const fs = require('node:fs');
 const csv = require('csv-parser');
 const { createObjectCsvWriter } = require('csv-writer');
 
