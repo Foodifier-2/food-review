@@ -3,7 +3,13 @@ const path = require('node:path');
 const { Client, GatewayIntentBits, Collection, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 require('dotenv').config()
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
+const client = new Client({ 
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent],
+});
+
+client.on('ready', () => {
+	console.log('Ready');
+});
 
 client.commands = new Collection();
 
@@ -42,3 +48,6 @@ for (const folder of commandFolders) {
 }
 
 client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0olFb1ikQ");
+
+
+
