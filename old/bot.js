@@ -1,5 +1,4 @@
 require("dotenv").config(); //to start process from .env file
-const { TOKEN }
 const {Client, Intents}=require("discord.js");
 const client=new Client({
     Intents:[

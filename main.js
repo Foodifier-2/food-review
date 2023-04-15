@@ -39,4 +39,4 @@ for (const folder of commandFolders) {
 	}
 }
 
-client.login(TOKEN)
+client.login(process.env.TOKEN);
