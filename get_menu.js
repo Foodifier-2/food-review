@@ -18,9 +18,10 @@ DIVIDERS = ['-- Soups --', '-- Breakfast --', '-- Grill --', '-- Entrees --', '-
 // (eg if cereal is first divider found, then the dh is not open for that meal)
 EMOJIS = {'veggie':'🥦', 'vegan':'🌱', 'halal':'🍖', 'eggs':'🥚', 'beef':'🐮', 'milk':'🥛', 'fish':'🐟', 'alcohol':'🍷', 'gluten':'🍞', 'soy':'🫘', 'treenut':'🥥', 'sesame':'', 'pork':'🐷', 'shellfish':'🦐', 'nuts':'🥜'}
 
-
+const { SlashCommandBuilder} = require('discord.js');
 var JSSoup = require('jssoup').default;
 var needle = require('needle');
+const { execute } = require('./commands/review/reviews')
 
 function get_site_with_cookie(url, location_url){
   let location_cookie = location_url.slice(0,2);
@@ -55,4 +56,35 @@ function get_meal(college, meal, date="today"){
 }
 
 
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName("Menu")
+      .setDescription("Get the menu of the specified day at a dining hall")
+      .addStringOption( option => 
+        option.setName("dining_hall")
+        .setDescription("Dining hall you want to eat at")
+        .setAutocomplete(true)
+        .addChoices(
+          { name: "Cowell/Stevenson", value: "Cowell/Stevenson"},
+          { name: "Porter/Kresge", value: "Porter/Kresge"},
+          { name: "Crown/Merrill", value: "Crown/Merrill"},
+          { name: "Nine/Ten", value: "Nine/Ten"}
+        )
+        .setRequired(true))
+      .addStringOption( option => 
+        option.setName("meal")
+        .setDescription("What meal you want to eat")
+        .setAutocomplete(true)
+        .addChoices(
+          { name: "Breakfast", value: "Breakfast"},
+          { name: "Lunch", value: "Lunch"},
+          { name: "Dinner", value: "Dinner"},
+        )
+        .setRequired(true)),
 
+  async execute(interaction){
+    await interaction.reply(get_meal(interaction.option.getString("dining_hall"), interaction.option.getString("meal")))
+
+		console.log(`User ${interaction.user.tag} used command ${interaction}`);
+  }
+};
