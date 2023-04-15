@@ -30,7 +30,7 @@ module.exports = {
 					.setAutocomplete(true)
 					.setRequired(true))
 			.addStringOption(option =>
-				option.setName('sort by')
+				option.setName('sort_by')
 					.setDescription('Sort')
 					.addChoices(
 						{ name: 'Highest Ratings', value: 'high' },
