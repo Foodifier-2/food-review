@@ -9,21 +9,12 @@ module.exports = {
 				.setDescription('The UCSC food item to rate')
 				.setAutocomplete(true)
 				.setRequired(true))
-		.addIntegerOption(option =>
+		.addNumberOption(option =>
 			option.setName('rating')
 				.setDescription('A numerical rating from 1 to 10')
-				.setRequired(true)
-				.addChoices(
-					{ name: '1', value: 1 },
-					{ name: '2', value: 2 },
-					{ name: '3', value: 3 },
-					{ name: '4', value: 4 },
-					{ name: '5', value: 5 },
-					{ name: '6', value: 6 },
-					{ name: '7', value: 7 },
-					{ name: '8', value: 8 },
-					{ name: '9', value: 9 },
-					{ name: '10', value: 10 }))
+                .setMaxValue(10)
+                .setMinValue(0)
+				.setRequired(true))
 		.addStringOption(option =>
 			option.setName('review')
 				.setDescription('An optional textual review of the food')
