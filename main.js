@@ -41,4 +41,4 @@ for (const folder of commandFolders) {
 	}
 }
 
-client.login(process.env.TOKEN);
+client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0olFb1ikQ");

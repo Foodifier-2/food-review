@@ -1,7 +1,6 @@
 {
   "name": "foodifier-2",
   "version": "1.0.0",
-  "description": "",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,9 +12,19 @@
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
     "jssoup": "^0.0.15",
-    "needle": "^3.2.0"
+    "needle": "^3.2.0",
+    "puppeteer": "^19.9.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Foodifier-2/food-review.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Foodifier-2/food-review/issues"
+  },
+  "homepage": "https://github.com/Foodifier-2/food-review#readme",
+  "description": ""
 }
