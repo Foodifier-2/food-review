@@ -65,7 +65,6 @@ module.exports = {
       .addStringOption( option => 
         option.setName("dining_hall")
         .setDescription("Dining hall you want to eat at")
-        .setAutocomplete(true)
         .addChoices(
           { name: "Cowell/Stevenson", value: "Cowell/Stevenson"},
           { name: "Porter/Kresge", value: "Porter/Kresge"},
@@ -76,11 +75,11 @@ module.exports = {
       .addStringOption( option => 
         option.setName("meal")
         .setDescription("What meal you want to eat")
-        .setAutocomplete(true)
         .addChoices(
           { name: "Breakfast", value: "Breakfast"},
           { name: "Lunch", value: "Lunch"},
           { name: "Dinner", value: "Dinner"},
+          { name: "Late Night", value: "Late Night"},
         )
         .setRequired(true)),
 
