@@ -51,9 +51,21 @@ function get_meal(college, meal, date="today"){
   let full_url = BASE_URL + MEAL_URL + meal + date_string;
 
   let response = get_site_with_cookie(full_url, location_url);
-
-  return response;
   let soup = new JSSoup(response);
+  console.log(soup.findAll('tr', recursive=true))
+    // for tr in table.find_all('tr',recursive=True): # recursive false so it doesnt get the text 3 times due to nested trs
+    //     #print(f"{tr}\n\n")
+    //     if (divider := tr.find('div',{'class':'longmenucolmenucat'})) is not None: # check if divider (Grill, Cereal etc) in current tr. if so, print or whatever and go to next tr
+    //         food_items[divider.text] = None
+    //         #print(divider.text)
+    //         continue
+    //     if (food := tr.find('div', {'class':'longmenucoldispname'})) is not None:
+    //         food_items[food.text] = [] # add food to dictionary 
+    //         #print(food.text)
+    //         for img in tr.find_all('img'): # iterate through dietary restrictions and get img src names
+    //             diets = img['src'].split('/')[1].split('.')[0] # parse them just in case i need them later 
+    //             
+    //             food_items[food.text].append(diets)
 
 }
 
