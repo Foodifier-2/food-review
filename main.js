@@ -3,9 +3,6 @@ const path = require('node:path');
 const { Client, GatewayIntentBits, Collection, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 require('dotenv').config()
 
-
-const {}
-
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
 
 client.commands = new Collection();
