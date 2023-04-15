@@ -1,3 +1,5 @@
+const 
+
 BASE_URL = "https://nutrition.sa.ucsc.edu/longmenu.aspx?sName=UC+Santa+Cruz+Dining&locationNum="
 LOCATION_URLS = {
     'Cowell/Stevenson': "05&locationName=Cowell%2fStevenson+Dining+Hall&naFlag=1",
@@ -21,7 +23,7 @@ EMOJIS = {'veggie':'🥦', 'vegan':'🌱', 'halal':'🍖', 'eggs':'🥚', 'beef'
 const { SlashCommandBuilder} = require('discord.js');
 var JSSoup = require('jssoup').default;
 var needle = require('needle');
-const { execute } = require('./commands/review/reviews')
+const { execute } = require('../review/reviews')
 
 function get_site_with_cookie(url, location_url){
   let location_cookie = location_url.slice(0,2);
@@ -58,7 +60,7 @@ function get_meal(college, meal, date="today"){
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("Menu")
+    .setName("menu")
       .setDescription("Get the menu of the specified day at a dining hall")
       .addStringOption( option => 
         option.setName("dining_hall")
