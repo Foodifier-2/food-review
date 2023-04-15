@@ -6,7 +6,7 @@ const LOCATION_URLS = {
 	'Porter/Kresge': "25&locationName=Porter%2fKresge+Dining+Hall&naFlag=1"
 };
 const MEAL_URL = "&WeeksMenus=UCSC+-+This+Week%27s+Menus&mealName=";
-const SCHEDULE = ['cowell'];
+
 const MEALS = ['Breakfast', 'Lunch', 'Dinner', 'Late Night', 'Auto'];
 //Auto meal selects meal based on current time
 const DIVIDERS = ['-- Soups --', '-- Breakfast --', '-- Grill --', '-- Entrees --', '-- Pizza --', '-- Clean Plate --', '-- DH Baked --', '-- Bakery --', '-- Open Bars --', '-- All Day --'];
@@ -17,53 +17,35 @@ const EMOJIS = { 'veggie': '🥦', 'vegan': '🌱', 'halal': '🍖', 'eggs': '�
 
 const { SlashCommandBuilder } = require('discord.js');
 var JSSoup = require('jssoup').default;
-var needle = require('needle');
-const puppeteer = require('puppeteer')
-const { execute } = require('../review/reviews');
+var axios = require('axios');
+
 
 function get_site_with_cookie(url, location_url) {
   console.log(url)
 	let location_cookie = location_url.slice(0, 2);
-	let options =  { 
-    cookies : {
-		'WebInaCartLocation': location_cookie,
-		'WebInaCartDates': '',
-		'WebInaCartMeals': '',
-		'WebInaCartQtys': '',
-		'WebInaCartRecipes': ''
-  }
-	};
+    const cookies = {
+        'WebInaCartLocation': location_cookie,
+        'WebInaCartDates': '',
+        'WebInaCartMeals': '',
+        'WebInaCartQtys': '',
+        'WebInaCartRecipes': ''
+      };
+    
+      return axios.get(url, { 
+        headers: {
+          'Cookie': Object.entries(cookies).map(c => c.join('=')).join('; ')
+        }
+    }).then(response => {
+        console.log('worked');
+        console.log(response.status);
+        console.log(response.data);
+        return response;
+      }).catch(error => {
+        console.error(error);
+        return error;
+      });
 
-  
-	// let response = needle.request("get", url, options, function(err, resp){ 
- //    if(resp.statusCode == 200) console.log('worked'); console.log(resp.statusCode); console.log(resp);
- //  });
-	return response;
 }
-
-
- async function scrape(url,location_url) {
-  const browser = await puppeteer.launch({
-    headless : true
-  });
-  const page = await browser.newPage();
-  await page.goto(url);
-  const cookies = [
-    {name: 'WebInaCartLocation', value:location_url.slice(0,2)},
-    {name: 'WebInaCartDates', value:''},
-    {name: 'WebInaCartMeals', value:''},
-    {name: 'WebInaCartQtys', value:''},
-    {name: 'WebInaCartRecipes', value:''},
-  ];
-  await page.setCookie(...cookies);
-  const cookiesSet = page.cookies(url);
-  await page.goto(url);
-
-  const data = await page.evaluate(() => document.querySelector('*').outerHTML);
-  
-  console.log(data);
-  return data;
- }
 
 function get_meal(college, meal, date = "today") {
 	let food_items = [];
@@ -77,10 +59,10 @@ function get_meal(college, meal, date = "today") {
 	//console.log(location_url)
 
 	let full_url = BASE_URL + location_url + MEAL_URL + meal + date_string;
-  scrape(full_url, location_url) 
-
-	// let response = get_site_with_cookie(full_url, location_url);
-	// let soup = new JSSoup(response);
+	console.log(full_url);
+	let response = get_site_with_cookie(full_url, location_url);
+	console.log(response);
+	//let soup = new JSSoup(response);
 	//console.log(soup.findAll('tr', recursive = true));
 	// for tr in table.find_all('tr',recursive=True): # recursive false so it doesnt get the text 3 times due to nested trs
 	//     #print(f"{tr}\n\n")
@@ -98,37 +80,4 @@ function get_meal(college, meal, date = "today") {
   return "hi";
 }
 
-
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName("menu")
-		.setDescription("Get the menu of the specified day at a dining hall")
-		.addStringOption(option =>
-			option.setName("dining_hall")
-				.setDescription("Dining hall you want to eat at")
-				.addChoices(
-					{ name: "Cowell/Stevenson", value: "Cowell/Stevenson" },
-					{ name: "Porter/Kresge", value: "Porter/Kresge" },
-					{ name: "Crown/Merrill", value: "Crown/Merrill" },
-					{ name: "Nine/Ten", value: "Nine/Ten" }
-				)
-				.setRequired(true))
-		.addStringOption(option =>
-			option.setName("meal")
-				.setDescription("What meal you want to eat")
-				.addChoices(
-					{ name: "Breakfast", value: "Breakfast" },
-					{ name: "Lunch", value: "Lunch" },
-					{ name: "Dinner", value: "Dinner" },
-					{ name: "Late Night", value: "Late Night" },
-				)
-				.setRequired(true)),
-
-	async execute(interaction) {
-		const hall = interaction.options.getString("dining_hall");
-		const meal = interaction.options.getString("meal");
-		await interaction.reply(get_meal(hall, meal));
-
-		console.log(`User ${interaction.user.tag} used command ${interaction}`);
-	}
-};
+get_meal('Cowell/Stevenson', 'Lunch');
