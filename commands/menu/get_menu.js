@@ -20,53 +20,37 @@ var JSSoup = require('jssoup').default;
 var needle = require('needle');
 const puppeteer = require('puppeteer')
 const { execute } = require('../review/reviews');
+const cheerio = require("cheerio");
+
+var axios = require('axios');
+const pretty = require('pretty');
+
 
 function get_site_with_cookie(url, location_url) {
   console.log(url)
 	let location_cookie = location_url.slice(0, 2);
-	let options =  { 
-    cookies : {
-		'WebInaCartLocation': location_cookie,
-		'WebInaCartDates': '',
-		'WebInaCartMeals': '',
-		'WebInaCartQtys': '',
-		'WebInaCartRecipes': ''
-  }
-	};
+    const cookies = {
+        'WebInaCartLocation': location_cookie,
+        'WebInaCartDates': '',
+        'WebInaCartMeals': '',
+        'WebInaCartQtys': '',
+        'WebInaCartRecipes': ''
+      };
+    
+      return axios.get(url, { 
+        headers: {
+          'Cookie': Object.entries(cookies).map(c => c.join('=')).join('; ')
+        }
+    }).then(response => {
+        return response;
+      }).catch(error => {
+        return error;
+      });
 
-  
-	// let response = needle.request("get", url, options, function(err, resp){ 
- //    if(resp.statusCode == 200) console.log('worked'); console.log(resp.statusCode); console.log(resp);
- //  });
-	return response;
 }
 
-
- async function scrape(url,location_url) {
-  const browser = await puppeteer.launch({
-    headless : true
-  });
-  const page = await browser.newPage();
-  await page.goto(url);
-  const cookies = [
-    {name: 'WebInaCartLocation', value:location_url.slice(0,2)},
-    {name: 'WebInaCartDates', value:''},
-    {name: 'WebInaCartMeals', value:''},
-    {name: 'WebInaCartQtys', value:''},
-    {name: 'WebInaCartRecipes', value:''},
-  ];
-  await page.setCookie(...cookies);
-  const cookiesSet = page.cookies(url);
-  await page.goto(url);
-
-  const data = await page.evaluate(() => document.querySelector('*').outerHTML);
-  
-  console.log(data);
-  return data;
- }
-
 function get_meal(college, meal, date = "today") {
-	let food_items = [];
+	let food_items = {};
 	let date_string = "";
 	if (date != "today") {
 		let date_split = date.split("/");
@@ -77,11 +61,46 @@ function get_meal(college, meal, date = "today") {
 	//console.log(location_url)
 
 	let full_url = BASE_URL + location_url + MEAL_URL + meal + date_string;
-  scrape(full_url, location_url) 
+
+	let response = get_site_with_cookie(full_url, location_url);
+
+  console.log(response);
+
+  const $ = cheerio.load(response);
+
+  console.log(pretty($.html()));
+    
+  table = $('tr').eq(1).find('div');
+
+  console.log(table.text());
+  // for (const tr in $('tr')){
+  //   console.log(tr);
+  // }
+
+
 
 	// let response = get_site_with_cookie(full_url, location_url);
 	// let soup = new JSSoup(response);
-	//console.log(soup.findAll('tr', recursive = true));
+	// console.log(soup.findAll('tr', recursive = true));
+
+
+  // for (const tr in soup.findAll('tr', recursive=true)){
+  //   let divider;
+  //   if(divider = tr.find('div', {'class':'longmenucolmenucat'}) != null){
+  //       // console.log(divider)
+  //       food_items[divider.text] = null
+  //       continue
+  //   }
+  //   let food;
+  //   if (food = tr.find('div', {'class':'longmenucoldispname'}) != null) {
+  //     food_items[food.text] = []
+  //     for (const img in tr.findAll('img')){
+  //       diets = img['src'].split('/')[1].split('.')[0]
+  //       food_items[food.text].append(diets);
+  //     }
+  //   }
+  // // console.log(food_items)
+  // }
 	// for tr in table.find_all('tr',recursive=True): # recursive false so it doesnt get the text 3 times due to nested trs
 	//     #print(f"{tr}\n\n")
 	//     if (divider := tr.find('div',{'class':'longmenucolmenucat'})) is not None: # check if divider (Grill, Cereal etc) in current tr. if so, print or whatever and go to next tr
