@@ -9,11 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
     "jssoup": "^0.0.15",
     "needle": "^3.2.0",
-    "puppeteer": "^19.9.0"
+    "puppeteer": "^19.9.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

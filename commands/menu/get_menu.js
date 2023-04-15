@@ -18,6 +18,7 @@ const EMOJIS = { 'veggie': '🥦', 'vegan': '🌱', 'halal': '🍖', 'eggs': '�
 const { SlashCommandBuilder } = require('discord.js');
 var JSSoup = require('jssoup').default;
 var needle = require('needle');
+const puppeteer = require('puppeteer')
 const { execute } = require('../review/reviews');
 
 function get_site_with_cookie(url, location_url) {
@@ -32,11 +33,37 @@ function get_site_with_cookie(url, location_url) {
 		'WebInaCartRecipes': ''
   }
 	};
-	let response = needle.request("get", url, options, function(err, resp){ 
-    if(resp.statusCode == 200) console.log('worked'); console.log(resp.statusCode); console.log(resp);
-  });
+
+  
+	// let response = needle.request("get", url, options, function(err, resp){ 
+ //    if(resp.statusCode == 200) console.log('worked'); console.log(resp.statusCode); console.log(resp);
+ //  });
 	return response;
 }
+
+
+ async function scrape(url,location_url) {
+  const browser = await puppeteer.launch({
+    headless : true
+  });
+  const page = await browser.newPage();
+  await page.goto(url);
+  const cookies = [
+    {name: 'WebInaCartLocation', value:location_url.slice(0,2)},
+    {name: 'WebInaCartDates', value:''},
+    {name: 'WebInaCartMeals', value:''},
+    {name: 'WebInaCartQtys', value:''},
+    {name: 'WebInaCartRecipes', value:''},
+  ];
+  await page.setCookie(...cookies);
+  const cookiesSet = page.cookies(url);
+  await page.goto(url);
+
+  const data = await page.evaluate(() => document.querySelector('*').outerHTML);
+  
+  console.log(data);
+  return data;
+ }
 
 function get_meal(college, meal, date = "today") {
 	let food_items = [];
@@ -50,9 +77,10 @@ function get_meal(college, meal, date = "today") {
 	//console.log(location_url)
 
 	let full_url = BASE_URL + location_url + MEAL_URL + meal + date_string;
-  
-	let response = get_site_with_cookie(full_url, location_url);
-	let soup = new JSSoup(response);
+  scrape(full_url, location_url) 
+
+	// let response = get_site_with_cookie(full_url, location_url);
+	// let soup = new JSSoup(response);
 	//console.log(soup.findAll('tr', recursive = true));
 	// for tr in table.find_all('tr',recursive=True): # recursive false so it doesnt get the text 3 times due to nested trs
 	//     #print(f"{tr}\n\n")
