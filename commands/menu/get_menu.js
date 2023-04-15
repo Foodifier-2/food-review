@@ -21,16 +21,20 @@ var needle = require('needle');
 const { execute } = require('../review/reviews');
 
 function get_site_with_cookie(url, location_url) {
-	console.log(location_url);
+  console.log(url)
 	let location_cookie = location_url.slice(0, 2);
-	let cookies = {
+	let options =  { 
+    cookies : {
 		'WebInaCartLocation': location_cookie,
 		'WebInaCartDates': '',
 		'WebInaCartMeals': '',
 		'WebInaCartQtys': '',
 		'WebInaCartRecipes': ''
+  }
 	};
-	let response = needle.request("get", url, cookies);
+	let response = needle.request("get", url, options, function(err, resp){ 
+    if(resp.statusCode == 200) console.log('worked'); console.log(resp.statusCode); console.log(resp);
+  });
 	return response;
 }
 
@@ -45,11 +49,11 @@ function get_meal(college, meal, date = "today") {
 	let location_url = LOCATION_URLS[college];
 	//console.log(location_url)
 
-	let full_url = BASE_URL + MEAL_URL + meal + date_string;
-
+	let full_url = BASE_URL + location_url + MEAL_URL + meal + date_string;
+  
 	let response = get_site_with_cookie(full_url, location_url);
 	let soup = new JSSoup(response);
-	console.log(soup.findAll('tr', recursive = true));
+	//console.log(soup.findAll('tr', recursive = true));
 	// for tr in table.find_all('tr',recursive=True): # recursive false so it doesnt get the text 3 times due to nested trs
 	//     #print(f"{tr}\n\n")
 	//     if (divider := tr.find('div',{'class':'longmenucolmenucat'})) is not None: # check if divider (Grill, Cereal etc) in current tr. if so, print or whatever and go to next tr
@@ -63,7 +67,7 @@ function get_meal(college, meal, date = "today") {
 	//             diets = img['src'].split('/')[1].split('.')[0] # parse them just in case i need them later
 	//
 	//             food_items[food.text].append(diets)
-
+  return "hi";
 }
 
 
@@ -94,7 +98,6 @@ module.exports = {
 
 	async execute(interaction) {
 		const hall = interaction.options.getString("dining_hall");
-		console.log(hall);
 		const meal = interaction.options.getString("meal");
 		await interaction.reply(get_meal(hall, meal));
 
