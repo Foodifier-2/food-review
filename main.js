@@ -1,16 +1,12 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+require('dotenv').config()
 
-import 'dotenv/config';
 
-import {
-	Client,
-	SlashCommandBuilder,
-	EmbedBuilder
-} from 'discord.js';
+const {}
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
 
 client.commands = new Collection();
 
