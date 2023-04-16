@@ -37,4 +37,4 @@ module.exports = {
     writeData
 };
 
-getAllData('user_reviews.csv').then((data) => console.log(data));
+//getAllData('user_reviews.csv').then((data) => console.log(data));
