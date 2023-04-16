@@ -48,7 +48,7 @@ async function findByFood(food, file) {
     const data = await readData(file);
     let reviews = []
     for (let i = 0; i < data.length; i++) {
-      if (data[i].food_item === food) {
+      if (data[i].food_item.localeCompare(food)) {
         reviews.push(data[i]);
       }
     }
@@ -61,7 +61,7 @@ async function sortRating(food, file, LH) {
     
     let reviews = []
     for (let i = 0; i < data.length; i++) {
-      if (data[i].food_item === food) {
+      if (data[i].food_item.localeCompare(food)) {
         reviews.push(data[i]);
       }
     }
