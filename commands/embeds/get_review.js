@@ -44,23 +44,23 @@ module.exports = {
 					.setRequired(true)),
 
 	async execute(interaction) {
-		let file = []
+		let file = [];
 		const sort_by = interaction.options.getString('sort_by');
 		const food_item = interaction.options.getString('food_item');
-		if(sort_by === 'high')
+		if(sort_by == 'high')
 		{
-			file = csv_rw.sortRating(
+			file = await csv_rw.sortRating(
 				food_item,
 				'user_reviews.csv', false
 			);
-		} else if(sort_by === 'low') 
+		} else if(sort_by == 'low') 
 		{
-			file = csv_rw.sortRating(
+			file = await csv_rw.sortRating(
 				food_item,
 				'user_reviews.csv', low
 			);
 		}
-
+    console.log(file)
 		const review_embed = new EmbedBuilder()
 			.setTitle(file[0].food_item)
 			.setAuthor(file[0].username)
