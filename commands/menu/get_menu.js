@@ -21,112 +21,76 @@ var needle = require('needle');
 const puppeteer = require('puppeteer')
 const { execute } = require('../review/reviews');
 const cheerio = require("cheerio");
-
-let {PythonShell} = require("python-shell");
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
 
 var axios = require('axios');
 const pretty = require('pretty');
 
 
-// async function get_site_with_cookie(url, location_url) {
-//   console.log(url)
-// 	let location_cookie = location_url.slice(0, 2);
-//     const cookies = {
-//         'WebInaCartLocation': location_cookie,
-//         'WebInaCartDates': '',
-//         'WebInaCartMeals': '',
-//         'WebInaCartQtys': '',
-//         'WebInaCartRecipes': ''
-//       };
-//    ucsc_html = axios.get(url, { 
-//         headers: {
-//           'Cookie': Object.entries(cookies).map(c => c.join('=')).join('; ')
-//         }
-//     })
-//
-//     // .then(response => {
-//     //     return response;
-//     //   }).catch(error => {
-//     //     return error;
-//     //   });
-//
-//   return ucsc_html;
-//
-// }
-//
+async function get_site_with_cookie(url, location_url) {
+  console.log(url)
+	let location_cookie = location_url.slice(0, 2);
+    const cookies = {
+        'WebInaCartLocation': location_cookie,
+        'WebInaCartDates': '',
+        'WebInaCartMeals': '',
+        'WebInaCartQtys': '',
+        'WebInaCartRecipes': ''
+      };
+    
+      return axios.get(url, { 
+        headers: {
+          'Cookie': Object.entries(cookies).map(c => c.join('=')).join('; ')
+        }
+    }).then(response => {
+        console.log('worked');
+        //console.log(response.data);
+        return response.data;
+      }).catch(error => {
+        console.error(error);
+        return error;
+      });
 
-
-function get_meal(college, meal, date="today"){
-  
-  let options = {
-    scriptPath: './python/',
-    args: [college,meal,date]
-  }
-  let a; 
-  PythonShell.run('menu.py', options).then(messages => {
-    a = messages;
-    // console.log(messages);
-  });
-
-  console.log(a);
-  // const { spawn } = require("child_process");
-  //
-  // const pythonProcess = spawn('python', ["../../python/menu.py", college, meal, date]);
-  // 
-  // pythonProcess.stdout.on('data', function(data){
-  //   console.log("test")
-  //   console.log(data.toString());
-  // });
-
-  return "hi";
 }
 
- async function get_site_with_cookie(url,location_url) {
-  const browser = await puppeteer.launch({
-    headless : true
-  });
-  const page = await browser.newPage();
-  await page.goto(url);
-  const cookies = [
-    {name: 'WebInaCartLocation', value:location_url.slice(0,2)},
-    {name: 'WebInaCartDates', value:''},
-    {name: 'WebInaCartMeals', value:''},
-    {name: 'WebInaCartQtys', value:''},
-    {name: 'WebInaCartRecipes', value:''},
-  ];
-  await page.setCookie(...cookies);
-  const cookiesSet = page.cookies(url);
-  await page.goto(url);
-
-  const data = await page.evaluate(() => document.querySelector('*').outerHTML);
-
-  console.log(data);
-  return data;
- }
-
-async function get_meal2(college, meal, date = "today") {
+async function get_meal(college, meal) {
 	let food_items = {};
 	let date_string = "";
-	if (date != "today") {
-		let date_split = date.split("/");
-		date_string = `&dtdate=${date_split[0]}%2F${date_split[1]}%2F${date_split[2]}`;
-	}
-	//console.log(college)
+
+	const today = new Date();
+	date = `&dtdate=${today.getMonth() + 1}%2F${today.getDate()}%2F${today.getFullYear().toString().substr(-2)}`;
+
 	let location_url = LOCATION_URLS[college];
 	//console.log(location_url)
 
-	let full_url = BASE_URL + location_url + MEAL_URL + meal + date_string;
+	let full_url = BASE_URL + location_url + MEAL_URL + meal + date;
+	console.log(full_url);
+	let response = await get_site_with_cookie(full_url, location_url);
+	console.log(response.data)
+  	food_items = {};
+	const dom = new JSDOM(response)
+  	dom.window.document.querySelectorAll('tr').forEach((tr) => {
+		if (tr.querySelector('div.longmenucolmenucat')) {
+		// If current tr has a divider
+		//console.log(tr.querySelector('div.longmenucolmenucat'));
+		food_items[tr.querySelector('div.longmenucolmenucat').textContent] = null;
+		return; // go to next tr
+		}
+		if (tr.querySelector('div.longmenucoldispname')) {
+		// If current tr has a food item
+		let food = tr.querySelector('div.longmenucoldispname').textContent;
+		food_items[food] = []; // add food to dictionary
+		for (let img of tr.querySelectorAll('img')) {
+			// Iterate through dietary restrictions and get img src names
+			let diets = img.getAttribute('src').split('/')[1].split('.')[0];
+			food_items[food].push(diets);
+		}
+		}
+  })
+  console.log(food_items)
+    
 
-
-	let response = get_site_with_cookie(full_url, location_url);
-
-  const $ = cheerio.load(response);
-
-  // console.log(pretty($.html()));
-
-  const table = $('tr').eq(1);
-
-  console.log(table.text());
   // for (const tr in $('tr')){
   //   console.log(tr);
   // }

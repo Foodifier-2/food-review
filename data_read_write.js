@@ -1,10 +1,11 @@
+const fs = require('node:fs');
 const csv = require('csv-parser');
 const { createObjectCsvWriter } = require('csv-writer');
 
 function readData() {
 	return new Promise((resolve, reject) => {
 	  const results = [];
-	  fs.createReadStream('data.csv')
+	  fs.createReadStream('user_reviews.csv')
 		.pipe(csv())
 		.on('data', (data) => results.push(data))
 		.on('end', () => resolve(results))
@@ -14,7 +15,7 @@ function readData() {
 
 function writeData(data) {
   const csvWriter = createObjectCsvWriter({
-    path: 'data.csv',
+    path: 'user_reviews.csv',
     header: [
       { id: 'name', title: 'name' },
       { id: 'rating', title: 'rating' },
