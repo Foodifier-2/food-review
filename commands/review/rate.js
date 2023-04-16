@@ -1,13 +1,15 @@
 const { SlashCommandBuilder } = require('discord.js');
+const fs = require('fs');
 const csv_rw = require('../../data_read_write');
 
+const foods = fs.readFileSync('menu_items.txt').toString().trim().split('\n')
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('rate')
 		.setDescription('Add a numerical rating of a UCSC food item and optionally a text review')
 		.addStringOption(option =>
 			option.setName('food_item')
-				.setDescription('The UCSC food item to rate')
+				.setDescription('The UCSC food item to rate (start typing something to autocomplete)')
 				.setAutocomplete(true)
 				.setRequired(true))
 		.addNumberOption(option =>
@@ -20,6 +22,16 @@ module.exports = {
 			option.setName('review')
 				.setDescription('An optional textual review of the food')
 				.setRequired(true)),
+
+	async autocomplete(interaction) {
+		const focusedValue = interaction.options.getFocused();
+		const choices = foods;	
+		const filtered = choices.filter(choice => 
+			choice.startsWith(focusedValue));
+		await interaction.respond(
+			filtered.map((choice) => ({ name: choice, value: choice })),
+		);
+	},
 
 	async execute(interaction) {
 		const d = [
