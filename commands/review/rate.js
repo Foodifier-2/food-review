@@ -22,7 +22,6 @@ module.exports = {
 				.setRequired(true)),
 
 	async execute(interaction) {
-		
 		const d = [
 			{username : interaction.user.tag,
 			food_item : interaction.options.getString('food_item'),
@@ -30,9 +29,11 @@ module.exports = {
 			review : interaction.options.getString('review')
 		}];
 		//console.log(typeof d);
-		console.log(d);
+		//console.log(d);
 
-		csv_rw.writeData(d, 'e.csv').then(() => console.log('Data written successfully!'));
+		csv_rw.writeData(d, 'user_reviews.csv').then(() =>
+		console.log(`Data from ${interaction.user.tag} for 
+		${interactive.options.getString('food_item')} written successfully!`));
 
 		await interaction.reply('Your Review has been submitted.');
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
