@@ -1,33 +1,40 @@
-const fs = require('node:fs');
-const csv = require('csv-parser');
-const { createObjectCsvWriter } = require('csv-writer');
+function readData(in_file) {
+    const fs = require('fs');
+    const csv = require('csv-parser');
 
-function readData() {
-	return new Promise((resolve, reject) => {
-	  const results = [];
-	  fs.createReadStream('user_reviews.csv')
-		.pipe(csv())
-		.on('data', (data) => results.push(data))
-		.on('end', () => resolve(results))
-		.on('error', reject);
-	});
+    return new Promise((resolve, reject) => {
+        const results = [];
+        fs.createReadStream(in_file)
+            .pipe(csv())
+            .on('data', (data) => results.push(data))
+            .on('end', () => resolve(results))
+            .on('error', reject);
+    });
 }
 
-function writeData(data) {
-  const csvWriter = createObjectCsvWriter({
-    path: 'user_reviews.csv',
-    header: [
-      { id: 'name', title: 'name' },
-      { id: 'rating', title: 'rating' },
-      { id: 'review', title: 'review' },
-    ],
-  });
-  return csvWriter.writeRecords(data);
+function writeData(data, out_file) {
+    const fs = require('fs');
+    const csv = require('csv-parser');
+    const csvWriter = createObjectCsvWriter({
+        path: out_file,
+        header: [
+            { id: 'username', title: 'username' },
+            { id: 'food_item', title: 'food_item' },
+            { id: 'rating', title: 'rating' },
+            { id: 'review', title: 'review' },
+        ],
+    });
+    return csvWriter.writeRecords(data);
 }
 
 async function getAllData() {
-	const data = await readData();
-	return data;
+    const data = await readData('user_reviews.csv');
+    return data;
 }
+
+module.exports = {
+    readData,
+    writeData
+};
 
 getAllData().then((data) => console.log(data));
