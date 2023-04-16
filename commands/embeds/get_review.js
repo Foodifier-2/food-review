@@ -45,15 +45,17 @@ module.exports = {
 
 	async execute(interaction) {
 		let file = []
+		const a = "high";
+		const b = "low";
 		const sort_by = interaction.options.getString('sort_by');
 		const food_item = interaction.options.getString('food_item');
-		if(sort_by === 'high')
+		if(a.localeCompare(sort_by))
 		{
 			file = csv_rw.sortRating(
 				food_item,
 				'user_reviews.csv', false
 			);
-		} else if(sort_by === 'low') 
+		} else if(b.localeCompare(sort_by)) 
 		{
 			file = csv_rw.sortRating(
 				food_item,
