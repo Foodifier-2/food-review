@@ -33,7 +33,7 @@ module.exports = {
 
 		csv_rw.writeData(d, 'user_reviews.csv').then(() =>
 		console.log(`Data from ${interaction.user.tag} for 
-		${interactive.options.getString('food_item')} written successfully!`));
+		${interaction.options.getString('food_item')} written successfully!`));
 
 		await interaction.reply('Your Review has been submitted.');
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);

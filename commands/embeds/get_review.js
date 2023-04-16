@@ -45,23 +45,25 @@ module.exports = {
 
 	async execute(interaction) {
 		let file = []
-		if(interaction.options.getString('sort_by') === 'high')
+		const sort_by = interaction.options.getString('sort_by');
+		const food_item = interaction.options.getString('food_item');
+		if(sort_by === 'high')
 		{
 			file = csv_rw.sortRating(
-				interaction.option.getString('food_item'),
+				food_item,
 				'user_reviews.csv', false
 			);
-		} else if(interaction.options.getString('sort_by') === 'low') 
+		} else if(sort_by === 'low') 
 		{
 			file = csv_rw.sortRating(
-				interaction.options.getString('food_item'),
+				food_item,
 				'user_reviews.csv', low
 			);
 		}
 
 		const review_embed = new EmbedBuilder()
 			.setTitle(file[0].food_item)
-			.setAuthor(file[0].name)
+			.setAuthor(file[0].username)
 			.setDescription(file[0].review)
 			.addFields(
 				{ name: 'Rating (1-10):', value: file[0].rating}
