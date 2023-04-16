@@ -48,8 +48,9 @@ async function findByFood(food, file) {
   let reviews = [];
   //console.log(data)
   for (let i = 0; i < data.length; i++) {
-    console.log(data[i].food_item);
+    
     if (data[i].food_item.localeCompare(food) == 0) {
+      console.log(data[i].food_item);
       reviews.push(data[i]);
     }
   }

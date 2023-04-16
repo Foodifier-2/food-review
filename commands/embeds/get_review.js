@@ -71,24 +71,10 @@ module.exports = {
 
 	async execute(interaction) {
 		let file = []
-		// const a = "high";
-		// const b = "low";
-		const sort_by = interaction.options.getString('sort_by');
+
 		const food_item = interaction.options.getString('food_item');
-		// if(a.localeCompare(sort_by))
-		// {
-		// 	file = await csv_rw.sortRating(
-		// 		food_item,
-		// 		'user_reviews.csv', false
-		// 	);
-		// } else if(b.localeCompare(sort_by)) 
-		// {
-		// 	file = await csv_rw.sortRating(
-		// 		food_item,
-		// 		'user_reviews.csv', true
-		// 	);
-		// }
-		file = await csv_rw.findByFood(food_item, 'user_reviews.csv');
+
+		file = await csv_rw.findByFood(food_item, './user_reviews.csv');
  
 		console.log(file)
 		const review_embed = await createSortedEmbed();

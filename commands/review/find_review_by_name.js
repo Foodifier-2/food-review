@@ -1,8 +1,8 @@
 
-const { SlashCommandBuilder, ButtonStyle, ComponentType } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const read_write = require("../../data_read_write.js");
 const main = require("../../main.js");
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('@discordjs/builders');
+const { EmbedBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -25,53 +25,16 @@ module.exports = {
 
 
     let client = main.getClient();
-    //
-    // console.log(client.users.cache.get(user.id));
+
+    console.log(client.users.cache.get(user.id));
 // client.users.cache.get(user.id).username}
     if(reviews != []){
-      let current_page = 0;
-      const left = new ButtonBuilder()
-        .setLabel("<-")
-        .setCustomId("left")
-        .setStyle(ButtonStyle.Primary)
-        .setDisabled(true)
-      const right = new ButtonBuilder()
-        .setLabel("->")
-        .setCustomId("right")
-        .setStyle(ButtonStyle.Primary)
-      const row = new ActionRowBuilder()
-        .addComponents(left, right)
-
-
       const embed = new EmbedBuilder()
         .setAuthor({name: user.username + "#" + user.discriminator})
         .setTitle("Reviews")
-        .setDescription(`Food:${reviews[current_page].food_item}\nRating:${reviews[current_page].rating}\nReviews:${reviews[current_page].review}`);
-			const response = await interaction.reply({ embeds: [embed], components: [row]});
-
-
-      const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 3_600_000 });
-
-      collector.on('collect', async i => {
-        
-        if(i.customId.localeCompare("right")){
-          console.log("test")
-          current_page++;
-          const new_embed = EmbedBuilder.from(embed).setDescription(`Food:${reviews[current_page].food_item}\nRating:${reviews[current_page].rating}\nReviews:${reviews[current_page].review}`);
-
-          const channel = client.channels.cache.get(response.interaction.channelId);
-
-          const message = await channel.messages.fetch(response.interaction.messageId);
-
-          console.log(message)
-
-
-          message.edit({embeds: [new_embed], componets: [row]});
-        } else{
-
-        }
-
-      });
+        .setDescription(`Food:${reviews[0].food_item}\nRating:${reviews[0].rating}\nReviews:${reviews[0].review}`);
+			await interaction.reply({ embeds: [embed] });
+      return;
 
     } else{
 
