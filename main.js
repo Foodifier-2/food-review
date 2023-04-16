@@ -53,13 +53,8 @@ for (const folder of commandFolders) {
 
 client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0olFb1ikQ");
 
-// async function getAllData(in_file) {
-//     const data = await csv_rw.readData(in_file);
-//     return data;
-//}
-
-//let data = getAllData('user_reviews.csv');
-//console.log(data)
+let data = csv_rw.readData('user_reviews.csv');
+console.log(data)
 
 
 
