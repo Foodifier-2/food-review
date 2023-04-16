@@ -1,8 +1,8 @@
 
-const { SlashCommandBuilder, ButtonStyle, ComponentType } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const read_write = require("../../data_read_write.js");
 const main = require("../../main.js");
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('@discordjs/builders');
+const { EmbedBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -25,24 +25,10 @@ module.exports = {
 
 
     let client = main.getClient();
-    //
-    // console.log(client.users.cache.get(user.id));
+
+    console.log(client.users.cache.get(user.id));
 // client.users.cache.get(user.id).username}
     if(reviews != []){
-      let current_page = 0;
-      const left = new ButtonBuilder()
-        .setLabel("<-")
-        .setCustomId("left")
-        .setStyle(ButtonStyle.Primary)
-        .setDisabled(true)
-      const right = new ButtonBuilder()
-        .setLabel("->")
-        .setCustomId("right")
-        .setStyle(ButtonStyle.Primary)
-      const row = new ActionRowBuilder()
-        .addComponents(left, right)
-
-
       const embed = new EmbedBuilder()
         .setAuthor({name: user.username + "#" + user.discriminator})
         .setTitle("Reviews")
@@ -92,7 +78,6 @@ module.exports = {
 
           response.edit({embeds: [new_embed], componets: [row_new]});
       });
-
     } else{
 
       await interaction.reply("User hasn't reviewed any menu items");

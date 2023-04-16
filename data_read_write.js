@@ -1,3 +1,5 @@
+const { EmbedBuilder } = require('discord.js');
+
 function readData(in_file) {
   const fs = require('fs');
   const csv = require('csv-parser');
@@ -45,13 +47,19 @@ async function findByName(name, file) {
 
 async function findByFood(food, file) {
   const data = await readData(file);
+  let reviews = [];
   //console.log(data)
   for (let i = 0; i < data.length; i++) {
-    if (data[i].food_item.localeCompare(food)) {
-      return data[i];
+    
+    if (data[i].food_item.localeCompare(food) == 0) {
+      const embed = new EmbedBuilder()
+        .setAuthor({name: data[i].username.username + "#" + data[i].username.discriminator})
+        .setTitle(data[i].food_item)
+        .setDescription(`**Rating: ${data[i].rating}/10\nReview: ${data[i].review}**`)
+      reviews.push(embed);
     }
   }
-  return null;
+  return reviews;
 }
 
 async function sortRating(food, file) {
