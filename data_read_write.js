@@ -36,8 +36,7 @@ async function findByName(name, file) {
   const data = await readData(file);
   let reviews = []
   for (let i = 0; i < data.length; i++) {
-    console.log(data[i]);
-    if (data[i].username == name) {
+    if (data[i].username.localeCompare(name)) {
       reviews.push(data[i]);
     }
   }
@@ -49,7 +48,6 @@ async function findByFood(food, file) {
   //console.log(data)
   for (let i = 0; i < data.length; i++) {
     if (data[i].food_item.localeCompare(food)) {
-      console.log(data[i]);
       return data[i];
     }
   }
