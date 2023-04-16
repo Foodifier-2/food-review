@@ -22,7 +22,6 @@ const { JSDOM } = jsdom;
 var axios = require('axios');
 
 async function get_site_with_cookie(url, location_url) {
-  console.log(url)
 	let location_cookie = location_url.slice(0, 2);
     const cookies = {
         'WebInaCartLocation': location_cookie,
@@ -37,8 +36,6 @@ async function get_site_with_cookie(url, location_url) {
           'Cookie': Object.entries(cookies).map(c => c.join('=')).join('; ')
         }
     }).then(response => {
-        console.log('worked');
-        //console.log(response.data);
         return response.data;
       }).catch(error => {
         console.error(error);
@@ -58,9 +55,7 @@ async function get_meal(college, meal) {
 	//console.log(location_url)
 
 	let full_url = BASE_URL + location_url + MEAL_URL + meal + date;
-	console.log(full_url);
 	let response = await get_site_with_cookie(full_url, location_url);
-	console.log(response.data)
   	food_items = {};
 	const dom = new JSDOM(response)
   	dom.window.document.querySelectorAll('tr').forEach((tr) => {
@@ -126,7 +121,6 @@ async function get_meal(college, meal) {
 	//             diets = img['src'].split('/')[1].split('.')[0] # parse them just in case i need them later
 	//
 	//             food_items[food.text].append(diets)
-	console.log(JSON.stringify(food_items));
   return food_items;
 }
 
@@ -171,7 +165,6 @@ module.exports = {
 			if (!DIVIDERS.includes(food)) {
 				msg += food;
 				for (let diet_restriction of food_items[food]) {
-					console.log(diet_restriction);
 					msg += EMOJIS[diet_restriction] + '  ';
 				}
 				msg += '\n';
