@@ -154,7 +154,7 @@ module.exports = {
 		await interaction.reply({ embeds: [embed] });
 
 		const foods_str = foods.join('\n')
-		await fs.writeFile('menu_items.txt', foods.join('\n').trim() + '\n', function(err) {
+		fs.writeFile('menu_items.txt', foods.join('\n').trim() + '\n', function(err) {
 			if (err) throw err;
 			foods = [];
 			//console.log(`Appended foods: \n${foods.join(', ')}\nto the text file.`);

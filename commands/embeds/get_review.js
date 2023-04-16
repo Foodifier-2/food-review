@@ -2,7 +2,7 @@ const {
 	AttachmentBuilder, EmbedBuilder,
 	SlashCommandBuilder, ActionRowBuilder,
 	ButtonBuilder, ButtonStyle,
-	MessageActionRow, MessageButton
+	MessageActionRow, MessageButton, UserManager
 } = require('discord.js');
 
 const csv_rw = require('../../data_read_write');
@@ -30,7 +30,6 @@ module.exports = {
 			.addStringOption(option =>
 				option.setName('food_item')
 					.setDescription('The UCSC food item to get reviews for this menu item.')
-					.setAutocomplete(false)
 					.setRequired(true))
 			.addStringOption(option =>
 				option.setName('sort_by')
@@ -67,12 +66,12 @@ module.exports = {
 		}
     console.log(file)
 		const review_embed = new EmbedBuilder()
-			.setTitle(file[0].food_item)
-			.setAuthor(file[0].username)
+			// .setTitle(file[0].food_item)
+			.setAuthor((file[0].username))
 			.setDescription(file[0].review)
-			.addFields(
-				{ name: 'Rating (1-10):', value: file[0].rating}
-			)
+			// .addFields(
+			// 	{ name: 'Rating (1-10):', value: file[0].rating}
+			// )
 			.setTimestamp();
 
 		await interaction.reply({ embeds: [review_embed] });
