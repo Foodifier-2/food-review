@@ -1,27 +1,27 @@
-const { AttachmentBuilder, EmbedBuilder, SlashCommandBuilder  } = require('discord.js');
+const { 
+	AttachmentBuilder, EmbedBuilder,
+	SlashCommandBuilder, ActionRowBuilder,
+	ButtonBuilder, ButtonStyle,
+	MessageActionRow, MessageButton
+} = require('discord.js');
+
 const csv_rw = require('../../data_read_write');
 //const file = new AttachmentBuilder('../assets/discordjs.png');
 
-const data = csv_rw.readData('user_reviews.csv');
-
-const exampleEmbed = new EmbedBuilder()
-	.setColor(0xedd100)
-	
-	//.setTitle('Some title')
-	//.setURL('https://discord.js.org/')
-	.setAuthor({ name: data[0]})
-	.setDescription('Some description here')
-	.setThumbnail('https://i.imgur.com/AfFp7pu.png')
-	.addFields(
-		{ name: 'Regular field title', value: 'Some value here' },
-		{ name: '\u200B', value: '\u200B' },
-		{ name: 'Inline field title', value: 'Some value here', inline: true },
-		{ name: 'Inline field title', value: 'Some value here', inline: true },
-	)
-	.addFields({ name: 'Inline field title', value: 'Some value here', inline: true })
-	.setImage('https://i.imgur.com/AfFp7pu.png')
-	.setTimestamp()
-	.setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' });
+// const review_embed = new EmbedBuilder()
+// 	.setColor(0xedd100)
+// 	.setTitle('Food Title')
+// 	//.setURL('https://discord.js.org/')
+// 	.setAuthor({ name: 'Author of Review'})
+// 	.setDescription('Food Review')
+// 	//.addFields(
+// 		//{ name: 'Rating (1-10):', value: 'rating' }
+// 		//{ name: '\u200B', value: '\u200B' },
+// 		//{ name: 'Inline field title', value: 'Some value here', inline: true },
+// 		//{ name: 'Inline field title', value: 'Some value here', inline: true }
+// 	//)
+// 	.setTimestamp()
+// 	//.setFooter({ text: 'Some footer text here'});
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -37,14 +37,40 @@ module.exports = {
 					.setDescription('Sort')
 					.addChoices(
 						{ name: 'Highest Ratings', value: 'high' },
-						{ name: 'Lowest Ratings', value: 'low' },
-						{ name: 'Newest', value: 'new' },
-						{ name: 'Oldest', value: 'old' }
+						{ name: 'Lowest Ratings', value: 'low' }
+						//{ name: 'Newest', value: 'new' },
+						//{ name: 'Oldest', value: 'old' }
 					)
 					.setRequired(true)),
 
 	async execute(interaction) {
-			await interaction.reply({ embeds: [exampleEmbed] });
-			console.log(`User ${interaction.user.tag} used command ${interaction}`);
+		let file = []
+		const sort_by = interaction.options.getString('sort_by');
+		const food_item = interaction.options.getString('food_item');
+		if(sort_by === 'high')
+		{
+			file = csv_rw.sortRating(
+				food_item,
+				'user_reviews.csv', false
+			);
+		} else if(sort_by === 'low') 
+		{
+			file = csv_rw.sortRating(
+				food_item,
+				'user_reviews.csv', low
+			);
+		}
+
+		const review_embed = new EmbedBuilder()
+			.setTitle(file[0].food_item)
+			.setAuthor(file[0].username)
+			.setDescription(file[0].review)
+			.addFields(
+				{ name: 'Rating (1-10):', value: file[0].rating}
+			)
+			.setTimestamp();
+
+		await interaction.reply({ embeds: [review_embed] });
+		console.log(`User ${interaction.user.tag} used command ${interaction}`);
 	},
 }

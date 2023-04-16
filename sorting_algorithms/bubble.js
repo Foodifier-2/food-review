@@ -37,3 +37,8 @@ function bubbleSortHL(arr){
     };
     return arr;
 };
+
+module.exports = {
+    bubbleSortLH,
+    bubbleSortHL
+};
