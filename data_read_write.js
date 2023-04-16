@@ -45,13 +45,15 @@ async function findByName(name, file) {
 
 async function findByFood(food, file) {
   const data = await readData(file);
+  let reviews = [];
   //console.log(data)
   for (let i = 0; i < data.length; i++) {
-    if (data[i].food_item.localeCompare(food)) {
-      return data[i];
+    console.log(data[i].food_item);
+    if (data[i].food_item.localeCompare(food) == 0) {
+      reviews.push(data[i]);
     }
   }
-  return null;
+  return reviews;
 }
 
 async function sortRating(food, file) {
