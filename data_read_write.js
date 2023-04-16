@@ -46,7 +46,7 @@ async function findByName(name, file) {
 
 async function findByFood(food, file) {
   const data = await readData(file);
-  console.log(data)
+  //console.log(data)
   for (let i = 0; i < data.length; i++) {
     if (data[i].food_item.localeCompare(food)) {
       console.log(data[i]);
