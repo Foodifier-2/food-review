@@ -38,10 +38,16 @@ async function getAllData(in_f) {
 
 async function findByName(name, file) {
   const data = await readData(file);
-  let reviews = []
+  let reviews = [];
+  //console.log(data)g
   for (let i = 0; i < data.length; i++) {
-    if (data[i].username.localeCompare(name)) {
-      reviews.push(data[i]);
+    console.log(data[i]);
+    if (data[i].user_id.localeCompare(name) == 0) {
+      const embed = new EmbedBuilder()
+        .setAuthor({name: data[i].username})
+        .setTitle(data[i].food_item)
+        .setDescription(`**Rating: ${data[i].rating}/10\nReview: ${data[i].review}**`)
+      reviews.push(embed);
     }
   }
   return reviews;
