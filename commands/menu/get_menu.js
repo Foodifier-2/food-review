@@ -18,8 +18,8 @@ const EMOJIS = { 'veggie': '🥦', 'vegan': '🌱', 'halal': '🍖', 'eggs': '�
 const { SlashCommandBuilder, Embed, EmbedBuilder } = require('discord.js');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
-
-var axios = require('axios');
+const fs = require('fs');
+const axios = require('axios');
 
 async function get_site_with_cookie(url, location_url) {
 	let location_cookie = location_url.slice(0, 2);
@@ -43,6 +43,8 @@ async function get_site_with_cookie(url, location_url) {
       });
 
 }
+
+
 
 async function get_meal(college, meal) {
 	let food_items = {};
@@ -109,6 +111,10 @@ module.exports = {
 				.setRequired(true)),
 
 	async execute(interaction) {
+
+		let foods = fs.readFileSync('menu_items.txt').toString().trim().split("\n"); 
+		//console.log(foods);
+
 		const hall = interaction.options.getString("dining_hall");
 		const meal = interaction.options.getString("meal");
 
@@ -128,7 +134,11 @@ module.exports = {
 			}
 			
 			if (!DIVIDERS.includes(food)) {
-				msg += food;
+				msg += food; 
+				if (!foods.includes(food)) {
+					console.log(food);
+					foods.push(food);
+				};	
 				for (let diet_restriction of food_items[food]) {
 					msg += EMOJIS[diet_restriction] + '  ';
 				}
@@ -143,6 +153,15 @@ module.exports = {
 			.setDescription(msg);
 		await interaction.reply({ embeds: [embed] });
 
+		const foods_str = foods.join('\n')
+		await fs.writeFile('menu_items.txt', foods.join('\n').trim() + '\n', function(err) {
+			if (err) throw err;
+			foods = [];
+			//console.log(`Appended foods: \n${foods.join(', ')}\nto the text file.`);
+		});
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
-	}
+	},
+
+	
+	
 };
