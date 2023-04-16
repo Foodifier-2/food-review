@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
+const main = require('./main.js')
 
 function readData(in_file) {
   const fs = require('fs');
@@ -48,6 +49,11 @@ async function findByName(name, file) {
 async function findByFood(food, file) {
   const data = await readData(file);
   let reviews = [];
+
+  const client = main.getClient();
+
+  console.log(data[0].username)
+  console.log(client.users.cache);
   //console.log(data)
   for (let i = 0; i < data.length; i++) {
     
