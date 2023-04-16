@@ -52,3 +52,21 @@ client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0ol
 
 let data = csv_rw.readData('user_reviews.csv');
 //console.log(data)
+
+const { MessageActionRow, MessageButton } = require('discord.js');
+
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+
+	if (interaction.commandName === 'ping') {
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('primary')
+					.setLabel('Primary')
+					.setStyle('PRIMARY'),
+			);
+
+		await interaction.reply({ content: 'Pong!', components: [row] });
+	}
+});

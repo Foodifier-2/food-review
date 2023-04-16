@@ -133,3 +133,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 tempCodeRunnerFile.js
+
+.eslintrc.json

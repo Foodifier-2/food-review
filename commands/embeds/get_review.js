@@ -1,4 +1,10 @@
-const { AttachmentBuilder, EmbedBuilder, SlashCommandBuilder  } = require('discord.js');
+const { 
+	AttachmentBuilder, EmbedBuilder,
+	SlashCommandBuilder, ActionRowBuilder,
+	ButtonBuilder, ButtonStyle,
+	MessageActionRow, MessageButton
+} = require('discord.js');
+
 const csv_rw = require('../../data_read_write');
 //const file = new AttachmentBuilder('../assets/discordjs.png');
 
@@ -6,22 +12,18 @@ const data = csv_rw.readData('user_reviews.csv');
 
 const exampleEmbed = new EmbedBuilder()
 	.setColor(0xedd100)
-	
-	//.setTitle('Some title')
+	.setTitle('Food Title')
 	//.setURL('https://discord.js.org/')
-	.setAuthor({ name: data[0]})
-	.setDescription('Some description here')
-	.setThumbnail('https://i.imgur.com/AfFp7pu.png')
-	.addFields(
-		{ name: 'Regular field title', value: 'Some value here' },
-		{ name: '\u200B', value: '\u200B' },
-		{ name: 'Inline field title', value: 'Some value here', inline: true },
-		{ name: 'Inline field title', value: 'Some value here', inline: true },
-	)
-	.addFields({ name: 'Inline field title', value: 'Some value here', inline: true })
-	.setImage('https://i.imgur.com/AfFp7pu.png')
+	.setAuthor({ name: 'Author of Review'})
+	.setDescription('Food Review')
+	//.addFields(
+		//{ name: 'Regular field title', value: 'Some value here' },
+		//{ name: '\u200B', value: '\u200B' },
+		//{ name: 'Inline field title', value: 'Some value here', inline: true },
+		//{ name: 'Inline field title', value: 'Some value here', inline: true }
+	//)
 	.setTimestamp()
-	.setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' });
+	//.setFooter({ text: 'Some footer text here'});
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -44,7 +46,7 @@ module.exports = {
 					.setRequired(true)),
 
 	async execute(interaction) {
-			await interaction.reply({ embeds: [exampleEmbed] });
-			console.log(`User ${interaction.user.tag} used command ${interaction}`);
+		await interaction.reply({ embeds: [exampleEmbed] });
+		console.log(`User ${interaction.user.tag} used command ${interaction}`);
 	},
 }
