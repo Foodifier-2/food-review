@@ -21,6 +21,7 @@ function writeData(data, out_file) {
     path: out_file,
     header: [
       { id: 'username', title: 'username' },
+      { id: 'user_id', title: 'user_id' },
       { id: 'food_item', title: 'food_item' },
       { id: 'rating', title: 'rating' },
       { id: 'review', title: 'review' },
@@ -52,14 +53,14 @@ async function findByFood(food, file) {
 
   const client = main.getClient();
 
-  console.log(data[0].username)
+  console.log(data[0])
   console.log(client.users.cache);
-  //console.log(data)
+  //console.log(data)g
   for (let i = 0; i < data.length; i++) {
     
     if (data[i].food_item.localeCompare(food) == 0) {
       const embed = new EmbedBuilder()
-        .setAuthor({name: data[i].username.username + "#" + data[i].username.discriminator})
+        .setAuthor({name: data[i].username})
         .setTitle(data[i].food_item)
         .setDescription(`**Rating: ${data[i].rating}/10\nReview: ${data[i].review}**`)
       reviews.push(embed);

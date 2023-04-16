@@ -35,7 +35,8 @@ module.exports = {
 
 	async execute(interaction) {
 		const d = [{
-			username : interaction.user.id,
+			username : interaction.user.username, 
+ 			user_id : interaction.user.id,
 			food_item : interaction.options.getString('food_item'),
 			rating : interaction.options.getNumber('rating'),
 			review : interaction.options.getString('review')
