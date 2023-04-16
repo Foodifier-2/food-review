@@ -75,8 +75,6 @@ module.exports = {
 		// const b = "low";
 		const sort_by = interaction.options.getString('sort_by');
 		const food_item = interaction.options.getString('food_item');
-		console.log(sort_by);
-		console.log(food_item)
 		// if(a.localeCompare(sort_by))
 		// {
 		// 	file = await csv_rw.sortRating(
@@ -91,8 +89,8 @@ module.exports = {
 		// 	);
 		// }
 		file = await csv_rw.findByFood(food_item, 'user_reviews.csv');
-
-		//console.log(file)
+ 
+		console.log(file)
 		const review_embed = await createSortedEmbed();
 		await interaction.reply({ embeds: [review_embed] });
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
