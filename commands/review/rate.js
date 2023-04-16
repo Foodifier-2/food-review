@@ -22,8 +22,8 @@ module.exports = {
 				.setRequired(true)),
 
 	async execute(interaction) {
-		const d = [
-			{username : interaction.user.tag,
+		const d = [{
+			username : interaction.user.tag,
 			food_item : interaction.options.getString('food_item'),
 			rating : interaction.options.getNumber('rating'),
 			review : interaction.options.getString('review')

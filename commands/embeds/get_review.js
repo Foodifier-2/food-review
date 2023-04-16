@@ -8,22 +8,20 @@ const {
 const csv_rw = require('../../data_read_write');
 //const file = new AttachmentBuilder('../assets/discordjs.png');
 
-const data = csv_rw.readData('user_reviews.csv');
-
-const exampleEmbed = new EmbedBuilder()
-	.setColor(0xedd100)
-	.setTitle('Food Title')
-	//.setURL('https://discord.js.org/')
-	.setAuthor({ name: 'Author of Review'})
-	.setDescription('Food Review')
-	//.addFields(
-		//{ name: 'Regular field title', value: 'Some value here' },
-		//{ name: '\u200B', value: '\u200B' },
-		//{ name: 'Inline field title', value: 'Some value here', inline: true },
-		//{ name: 'Inline field title', value: 'Some value here', inline: true }
-	//)
-	.setTimestamp()
-	//.setFooter({ text: 'Some footer text here'});
+// const review_embed = new EmbedBuilder()
+// 	.setColor(0xedd100)
+// 	.setTitle('Food Title')
+// 	//.setURL('https://discord.js.org/')
+// 	.setAuthor({ name: 'Author of Review'})
+// 	.setDescription('Food Review')
+// 	//.addFields(
+// 		//{ name: 'Rating (1-10):', value: 'rating' }
+// 		//{ name: '\u200B', value: '\u200B' },
+// 		//{ name: 'Inline field title', value: 'Some value here', inline: true },
+// 		//{ name: 'Inline field title', value: 'Some value here', inline: true }
+// 	//)
+// 	.setTimestamp()
+// 	//.setFooter({ text: 'Some footer text here'});
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -39,14 +37,38 @@ module.exports = {
 					.setDescription('Sort')
 					.addChoices(
 						{ name: 'Highest Ratings', value: 'high' },
-						{ name: 'Lowest Ratings', value: 'low' },
-						{ name: 'Newest', value: 'new' },
-						{ name: 'Oldest', value: 'old' }
+						{ name: 'Lowest Ratings', value: 'low' }
+						//{ name: 'Newest', value: 'new' },
+						//{ name: 'Oldest', value: 'old' }
 					)
 					.setRequired(true)),
 
 	async execute(interaction) {
-		await interaction.reply({ embeds: [exampleEmbed] });
+		let file = []
+		if(interaction.options.getString('sort_by') === 'high')
+		{
+			file = csv_rw.sortRating(
+				interaction.option.getString('food_item'),
+				'user_reviews.csv', false
+			);
+		} else if(interaction.options.getString('sort_by') === 'low') 
+		{
+			file = csv_rw.sortRating(
+				interaction.options.getString('food_item'),
+				'user_reviews.csv', low
+			);
+		}
+
+		const review_embed = new EmbedBuilder()
+			.setTitle(file[0].food_item)
+			.setAuthor(file[0].name)
+			.setDescription(file[0].review)
+			.addFields(
+				{ name: 'Rating (1-10):', value: file[0].rating}
+			)
+			.setTimestamp();
+
+		await interaction.reply({ embeds: [review_embed] });
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
 	},
 }
