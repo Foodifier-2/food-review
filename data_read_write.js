@@ -13,8 +13,7 @@ function readData(in_file) {
 }
 
 function writeData(data, out_file) {
-    const fs = require('fs');
-    const csv = require('csv-parser');
+    const { createObjectCsvWriter } = require('csv-writer');
     const csvWriter = createObjectCsvWriter({
         path: out_file,
         header: [
@@ -37,4 +36,4 @@ module.exports = {
     writeData
 };
 
-getAllData('user_reviews.csv').then((data) => console.log(data));
+//getAllData('user_reviews.csv').then((data) => console.log(data));

@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const csv_rw = require('../../data_read_write');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -18,10 +19,19 @@ module.exports = {
 		.addStringOption(option =>
 			option.setName('review')
 				.setDescription('An optional textual review of the food')
-				.setRequired(false)),
+				.setRequired(true)),
 
 	async execute(interaction) {
-		await interaction.reply('hi');
+		const username = interaction.user.tag;
+		const food_item = interaction.options.getString('food_item');
+		const rating = interaction.options.getNumber('rating');
+		const review = interaction.options.getString('review');
+		const d = [username, food_item, rating, review];
+		console.log(d);
+
+		csv_rw.writeData(d, 'e.csv')
+
+		await interaction.reply('Your Review has been submitted.');
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
 	},
 };
