@@ -53,7 +53,7 @@ async function findByFood(food, file) {
     
     if (data[i].food_item.localeCompare(food) == 0) {
       const embed = new EmbedBuilder()
-        .setAuthor({name: data[i].username + "#" + data[i].username.discriminator})
+        .setAuthor({name: data[i].username.username + "#" + data[i].username.discriminator})
         .setTitle(data[i].food_item)
         .setDescription(`**Rating: ${data[i].rating}/10\nReview: ${data[i].review}**`)
       reviews.push(embed);
