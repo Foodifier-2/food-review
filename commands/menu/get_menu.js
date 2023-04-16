@@ -18,14 +18,14 @@ const EMOJIS = { 'veggie': '🥦', 'vegan': '🌱', 'halal': '🍖', 'eggs': '�
 const { SlashCommandBuilder } = require('discord.js');
 var JSSoup = require('jssoup').default;
 var needle = require('needle');
-const puppeteer = require('puppeteer')
+//const puppeteer = require('puppeteer')
 const { execute } = require('../review/reviews');
-const cheerio = require("cheerio");
+//const cheerio = require("cheerio");
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
 var axios = require('axios');
-const pretty = require('pretty');
+//const pretty = require('pretty');
 
 
 async function get_site_with_cookie(url, location_url) {

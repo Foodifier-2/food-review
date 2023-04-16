@@ -27,8 +27,8 @@ function writeData(data, out_file) {
     return csvWriter.writeRecords(data);
 }
 
-async function getAllData() {
-    const data = await readData('user_reviews.csv');
+async function getAllData(in_file) {
+    const data = await readData(in_file);
     return data;
 }
 

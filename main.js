@@ -51,7 +51,13 @@ for (const folder of commandFolders) {
 	}
 }
 
-let data = csv_rw.readData('user_reviews.csv');
+client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0olFb1ikQ");
+
+let data = getAllData('user_reviews.csv');
 console.log(data)
 
-client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0olFb1ikQ");
+
+async function getAllData(in_file) {
+    const data = await csv_rw.readData(in_file);
+    return data;
+}
