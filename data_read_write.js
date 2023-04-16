@@ -56,7 +56,7 @@ async function findByFood(food, file) {
 }
 
 async function sortRating(food, file, LH) {
-    const bsl = require('/sorting_algorithms/bubble');
+    const bsl = require('./sorting_algorithms/bubble');
     const data = await readData(file);
     
     let reviews = []
