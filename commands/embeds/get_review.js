@@ -51,29 +51,29 @@ module.exports = {
 		// const b = "low";
 		//const sort_by = interaction.options.getString('sort_by');
 		const food_item = interaction.options.getString('food_item');
-		// if(a.localeCompare(sort_by))
-		// {
-		// 	file = csv_rw.sortRating(
-		// 		food_item,
-		// 		'user_reviews.csv', false
-		// 	);
-		// } else if(b.localeCompare(sort_by)) 
-		// {
-		// 	file = csv_rw.sortRating(
-		// 		food_item,
-		// 		'user_reviews.csv', true
-		// 	);
-		// }
-		file = csv_rw.findByFood(food_item, 'user_reviews.csv');
-		console.log(file);
+		console.log(sort_by);
+		console.log(food_item)
+		if(a.localeCompare(sort_by))
+		{
+			file = await csv_rw.sortRating(
+				food_item,
+				'user_reviews.csv', false
+			);
+		} else if(b.localeCompare(sort_by)) 
+		{
+			file = await csv_rw.sortRating(
+				food_item,
+				'user_reviews.csv', true
+			);
+		}
+    console.log(file)
 		const review_embed = new EmbedBuilder()
-			//.setTitle(file[0].food_item)
-			//.setAuthor(file[0].username)
-			//.setDescription(file[0].review)
-			//.addFields(
-			//	{ name: 'Rating (1-10):', value: file[0].rating}
-			//)
-			.setColor(0xedd100)
+			.setTitle(file[0].food_item)
+			.setAuthor(file[0].username)
+			.setDescription(file[0].review)
+			.addFields(
+				{ name: 'Rating (1-10):', value: file[0].rating}
+			)
 			.setTimestamp();
 
 		await interaction.reply({ embeds: [review_embed] });
