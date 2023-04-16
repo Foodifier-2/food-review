@@ -5,7 +5,10 @@ const {
 	MessageActionRow, MessageButton, UserManager
 } = require('discord.js');
 
+const fs = require('node:fs');
+
 const csv_rw = require('../../data_read_write');
+const foods = fs.readFileSync('menu_items.txt').toString().trim().split('\n')
 //const file = new AttachmentBuilder('../assets/discordjs.png');
 
 // const review_embed = new EmbedBuilder()
@@ -37,11 +40,12 @@ async function createSortedEmbed(food, file) {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('get_review')
-		.setDescription('Find a menu item.')
+		.setDescription('Get the reviews for the specified menu item')
 		.addStringOption(option =>
 			option.setName('food_item')
-				.setDescription('The UCSC food item to get reviews for this menu item.')
-				.setRequired(true)),
+				.setDescription('The UCSC food item to get reviews for')
+				.setRequired(true)
+				.setAutocomplete(true)),
 		// .addStringOption(option =>
 		// 	option.setName('sort_by')
 		// 		.setDescription('Sort')
@@ -55,7 +59,15 @@ module.exports = {
 		// 	//.setRequired(true)
 		// ),
 
-
+	async autocomplete(interaction) {
+		const focusedValue = interaction.options.getFocused();
+		const choices = foods;	
+		const filtered = choices.filter(choice => 
+			choice.startsWith(focusedValue));
+		await interaction.respond(
+			filtered.map((choice) => ({ name: choice, value: choice })),
+		);
+	},
 
 	async execute(interaction) {
 		let file = []
@@ -63,8 +75,6 @@ module.exports = {
 		// const b = "low";
 		const sort_by = interaction.options.getString('sort_by');
 		const food_item = interaction.options.getString('food_item');
-		console.log(sort_by);
-		console.log(food_item)
 		// if(a.localeCompare(sort_by))
 		// {
 		// 	file = await csv_rw.sortRating(
@@ -79,8 +89,8 @@ module.exports = {
 		// 	);
 		// }
 		file = await csv_rw.findByFood(food_item, 'user_reviews.csv');
-
-		//console.log(file)
+ 
+		console.log(file)
 		const review_embed = await createSortedEmbed();
 		await interaction.reply({ embeds: [review_embed] });
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
