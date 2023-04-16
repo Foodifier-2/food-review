@@ -3,6 +3,9 @@ const path = require('node:path');
 const { Client, GatewayIntentBits, Collection, SlashCommandBuilder, EmbedBuilder 
 } = require('discord.js');
 require('dotenv').config()
+const csv = require('csv-parser');
+const { createObjectCsvWriter } = require('csv-writer');
+const csv_rw = require('./data_read_write');
 
 const client = new Client({ 
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent],
@@ -47,5 +50,8 @@ for (const folder of commandFolders) {
 		}
 	}
 }
+
+let data = csv_rw.readData('user_reviews.csv');
+console.log(data)
 
 client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0olFb1ikQ");
