@@ -36,7 +36,8 @@ async function findByName(name, file) {
     const data = await readData(file);
     let reviews = []
     for (let i = 0; i < data.length; i++) {
-      if (data[i].name === name) {
+      console.log(data[i]);
+      if (data[i].username == name) {
         reviews.append(data[i]);
       }
     }
