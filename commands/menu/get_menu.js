@@ -22,34 +22,89 @@ const puppeteer = require('puppeteer')
 const { execute } = require('../review/reviews');
 const cheerio = require("cheerio");
 
+let {PythonShell} = require("python-shell");
+
 var axios = require('axios');
 const pretty = require('pretty');
 
 
-function get_site_with_cookie(url, location_url) {
-  console.log(url)
-	let location_cookie = location_url.slice(0, 2);
-    const cookies = {
-        'WebInaCartLocation': location_cookie,
-        'WebInaCartDates': '',
-        'WebInaCartMeals': '',
-        'WebInaCartQtys': '',
-        'WebInaCartRecipes': ''
-      };
-    
-      return axios.get(url, { 
-        headers: {
-          'Cookie': Object.entries(cookies).map(c => c.join('=')).join('; ')
-        }
-    }).then(response => {
-        return response;
-      }).catch(error => {
-        return error;
-      });
+// async function get_site_with_cookie(url, location_url) {
+//   console.log(url)
+// 	let location_cookie = location_url.slice(0, 2);
+//     const cookies = {
+//         'WebInaCartLocation': location_cookie,
+//         'WebInaCartDates': '',
+//         'WebInaCartMeals': '',
+//         'WebInaCartQtys': '',
+//         'WebInaCartRecipes': ''
+//       };
+//    ucsc_html = axios.get(url, { 
+//         headers: {
+//           'Cookie': Object.entries(cookies).map(c => c.join('=')).join('; ')
+//         }
+//     })
+//
+//     // .then(response => {
+//     //     return response;
+//     //   }).catch(error => {
+//     //     return error;
+//     //   });
+//
+//   return ucsc_html;
+//
+// }
+//
 
+
+function get_meal(college, meal, date="today"){
+  
+  let options = {
+    scriptPath: './python/',
+    args: [college,meal,date]
+  }
+  let a; 
+  PythonShell.run('menu.py', options).then(messages => {
+    a = messages;
+    // console.log(messages);
+  });
+
+  console.log(a);
+  // const { spawn } = require("child_process");
+  //
+  // const pythonProcess = spawn('python', ["../../python/menu.py", college, meal, date]);
+  // 
+  // pythonProcess.stdout.on('data', function(data){
+  //   console.log("test")
+  //   console.log(data.toString());
+  // });
+
+  return "hi";
 }
 
-function get_meal(college, meal, date = "today") {
+ async function get_site_with_cookie(url,location_url) {
+  const browser = await puppeteer.launch({
+    headless : true
+  });
+  const page = await browser.newPage();
+  await page.goto(url);
+  const cookies = [
+    {name: 'WebInaCartLocation', value:location_url.slice(0,2)},
+    {name: 'WebInaCartDates', value:''},
+    {name: 'WebInaCartMeals', value:''},
+    {name: 'WebInaCartQtys', value:''},
+    {name: 'WebInaCartRecipes', value:''},
+  ];
+  await page.setCookie(...cookies);
+  const cookiesSet = page.cookies(url);
+  await page.goto(url);
+
+  const data = await page.evaluate(() => document.querySelector('*').outerHTML);
+
+  console.log(data);
+  return data;
+ }
+
+async function get_meal2(college, meal, date = "today") {
 	let food_items = {};
 	let date_string = "";
 	if (date != "today") {
@@ -62,15 +117,14 @@ function get_meal(college, meal, date = "today") {
 
 	let full_url = BASE_URL + location_url + MEAL_URL + meal + date_string;
 
-	let response = get_site_with_cookie(full_url, location_url);
 
-  console.log(response);
+	let response = get_site_with_cookie(full_url, location_url);
 
   const $ = cheerio.load(response);
 
-  console.log(pretty($.html()));
-    
-  table = $('tr').eq(1).find('div');
+  // console.log(pretty($.html()));
+
+  const table = $('tr').eq(1);
 
   console.log(table.text());
   // for (const tr in $('tr')){

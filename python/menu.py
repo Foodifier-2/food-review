@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import time
 import urls
 import re
+import sys
 
 def get_meal_from_time(time):
     pass
@@ -77,4 +78,5 @@ def get_meal(college, meal, date='today'):  # get single meal, defaults to auto 
 
 if __name__ == '__main__':
     #print(get_site_with_cookie('https://nutrition.sa.ucsc.edu/longmenu.aspx?sName=UC+Santa+Cruz+Dining&locationNum=05&locationName=Cowell%2fStevenson+Dining+Hall&naFlag=1&WeeksMenus=UCSC+-+This+Week%27s+Menus&mealName=Dinner', '05').text)
-    print(get_meal('cowell/stevenson', 'Dinner', '04/02/23'))
+    print(get_meal(sys.argv[1],sys.argv[2],sys.argv[3]))
+    sys.stdout.flush()
