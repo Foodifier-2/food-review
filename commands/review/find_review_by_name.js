@@ -19,7 +19,7 @@ module.exports = {
 
     console.log(user);
     
-    const reviews = await read_write.findByName(user.username, "./user_reviews.csv");
+    const reviews = await read_write.findByName(user.id, "./user_reviews.csv");
 
     console.log(reviews);
 
@@ -28,7 +28,7 @@ module.exports = {
       await interaction.reply("User hasn't reviewed any menu items");
 
     } else{
-
+      await interaction.reply("hi");
       await interaction.reply(reviews);
 
     }
