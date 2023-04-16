@@ -27,10 +27,10 @@ module.exports = {
     let client = main.getClient();
 
     console.log(client.users.cache.get(user.id));
-
+// client.users.cache.get(user.id).username}
     if(reviews != []){
       const embed = new EmbedBuilder()
-        // .setAuthor(client.users.cache.get(user.id).username)
+        .setAuthor({name: user.username + "#" + user.discriminator})
         .setTitle("Reviews")
         .setDescription(`Food:${reviews[0].food_item}\nRating:${reviews[0].rating}\nReviews:${reviews[0].review}`);
 			await interaction.reply({ embeds: [embed] });

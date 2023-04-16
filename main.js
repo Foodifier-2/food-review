@@ -9,6 +9,7 @@ const csv_rw = require('./data_read_write');
 
 const client = new Client({ 
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent],
+  allowedMentions: { parse: ['users', 'roles'], repliedUser: true }
 });
 
 client.commands = new Collection();
