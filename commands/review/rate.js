@@ -47,7 +47,7 @@ module.exports = {
 		console.log(`Data from ${interaction.user.id} for 
 		${interaction.options.getString('food_item')} written successfully!`));
 
-		await interaction.reply('Your Review has been submitted.');
+		await interaction.reply(`You submitted a review for the item "${interaction.options.getString('food_item')}" with a rating of ${interaction.options.getNumber('rating')}/10. Review text: \n"${interaction.options.getString('review')}".`);
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
 	},
 };

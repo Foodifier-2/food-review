@@ -9,7 +9,6 @@ module.exports = {
 		.addStringOption(option =>
 			option.setName('food_item')
 				.setDescription('The UCSC food item to get reviews and ratings of')
-				.setAutocomplete(true)
 				.setRequired(true))
 		.addIntegerOption(option =>
 			option.setName('count')
