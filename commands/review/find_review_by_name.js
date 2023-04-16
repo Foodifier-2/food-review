@@ -17,19 +17,17 @@ module.exports = {
 	async execute(interaction) {
     const user = interaction.options.getUser("target");
 
-    console.log(user);
-    
     const reviews = await read_write.findByName(user.id, "./user_reviews.csv");
 
     console.log(reviews);
 
-    if(reviews == []){
+    if(reviews != []){
 
-      await interaction.reply("User hasn't reviewed any menu items");
+      await interaction.reply(reviews.toString());
 
     } else{
-      await interaction.reply("hi");
-      await interaction.reply(reviews);
+
+      await interaction.reply("User hasn't reviewed any menu items");
 
     }
 

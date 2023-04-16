@@ -38,7 +38,7 @@ async function findByName(name, file) {
     for (let i = 0; i < data.length; i++) {
       console.log(data[i]);
       if (data[i].username == name) {
-        reviews.append(data[i]);
+        reviews.push(data[i]);
       }
     }
     return reviews;
