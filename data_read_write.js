@@ -22,9 +22,11 @@ function writeData(data, out_file) {
             { id: 'rating', title: 'rating' },
             { id: 'review', title: 'review' },
         ],
+        append: true,
     });
     return csvWriter.writeRecords(data);
 }
+
 
 async function getAllData(in_f) {
     const data = await readData(in_f);

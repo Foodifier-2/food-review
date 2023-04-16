@@ -22,14 +22,17 @@ module.exports = {
 				.setRequired(true)),
 
 	async execute(interaction) {
-		const username = interaction.user.tag;
-		const food_item = interaction.options.getString('food_item');
-		const rating = interaction.options.getNumber('rating');
-		const review = interaction.options.getString('review');
-		const d = [username, food_item, rating, review];
+		
+		const d = [
+			{username : interaction.user.tag,
+			food_item : interaction.options.getString('food_item'),
+			rating : interaction.options.getNumber('rating'),
+			review : interaction.options.getString('review')
+		}];
+		//console.log(typeof d);
 		console.log(d);
 
-		csv_rw.writeData(d, 'e.csv')
+		csv_rw.writeData(d, 'e.csv').then(() => console.log('Data written successfully!'));
 
 		await interaction.reply('Your Review has been submitted.');
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
