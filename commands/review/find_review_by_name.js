@@ -1,6 +1,8 @@
 
 const { SlashCommandBuilder } = require('discord.js');
 const read_write = require("../../data_read_write.js");
+const main = require("../../main.js");
+const { EmbedBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -21,9 +23,18 @@ module.exports = {
 
     console.log(reviews);
 
-    if(reviews != []){
 
-      await interaction.reply(reviews.toString());
+    let client = main.getClient();
+
+    console.log(client.users.cache.get(user.id));
+
+    if(reviews != []){
+      const embed = new EmbedBuilder()
+        // .setAuthor(client.users.cache.get(user.id).username)
+        .setTitle("Reviews")
+        .setDescription(`Food:${reviews[0].food_item}\nRating:${reviews[0].rating}\nReviews:${reviews[0].review}`);
+			await interaction.reply({ embeds: [embed] });
+      return;
 
     } else{
 

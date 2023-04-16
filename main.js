@@ -13,6 +13,8 @@ const client = new Client({
 
 client.commands = new Collection();
 
+
+
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
@@ -49,6 +51,11 @@ for (const folder of commandFolders) {
 
 client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0olFb1ikQ");
 
+const getClient = () =>{
+  return client;
+}
+
+exports.getClient = getClient;
 
 //let data = csv_rw.readData('user_reviews.csv');
 //console.log(data)
