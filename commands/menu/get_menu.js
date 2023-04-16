@@ -16,17 +16,10 @@ const DIVIDERS = ['-- Soups --', '-- Breakfast --', '-- Grill --', '-- Entrees -
 const EMOJIS = { 'veggie': '🥦', 'vegan': '🌱', 'halal': '🍖', 'eggs': '🥚', 'beef': '🐮', 'milk': '🥛', 'fish': '🐟', 'alcohol': '🍷', 'gluten': '🍞', 'soy': '🫘', 'treenut': '🥥', 'sesame': '', 'pork': '🐷', 'shellfish': '🦐', 'nuts': '🥜' };
 
 const { SlashCommandBuilder } = require('discord.js');
-var JSSoup = require('jssoup').default;
-var needle = require('needle');
-const puppeteer = require('puppeteer')
-const { execute } = require('../review/reviews');
-const cheerio = require("cheerio");
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
 var axios = require('axios');
-const pretty = require('pretty');
-
 
 async function get_site_with_cookie(url, location_url) {
   console.log(url)
@@ -68,27 +61,26 @@ async function get_meal(college, meal) {
 	console.log(full_url);
 	let response = await get_site_with_cookie(full_url, location_url);
 	console.log(response.data)
-  	food_items = {};
+  	food_items = [];
 	const dom = new JSDOM(response)
   	dom.window.document.querySelectorAll('tr').forEach((tr) => {
 		if (tr.querySelector('div.longmenucolmenucat')) {
 		// If current tr has a divider
 		//console.log(tr.querySelector('div.longmenucolmenucat'));
-		food_items[tr.querySelector('div.longmenucolmenucat').textContent] = null;
-		return; // go to next tr
+		let food = tr.querySelector('div.longmenucolmenucat').textContent
+		if (!food_items.includes(food)){ 
+			food_items.push(food);
 		}
+	}
 		if (tr.querySelector('div.longmenucoldispname')) {
 		// If current tr has a food item
 		let food = tr.querySelector('div.longmenucoldispname').textContent;
-		food_items[food] = []; // add food to dictionary
-		for (let img of tr.querySelectorAll('img')) {
-			// Iterate through dietary restrictions and get img src names
-			let diets = img.getAttribute('src').split('/')[1].split('.')[0];
-			food_items[food].push(diets);
-		}
-		}
+		if (!food_items.includes(food)){ 
+			food_items.push(food); // add food to dictionary
+		}}
+		
   })
-  console.log(food_items)
+
     
 
   // for (const tr in $('tr')){
@@ -132,7 +124,8 @@ async function get_meal(college, meal) {
 	//             diets = img['src'].split('/')[1].split('.')[0] # parse them just in case i need them later
 	//
 	//             food_items[food.text].append(diets)
-  return "hi";
+	console.log(JSON.stringify(food_items));
+  return JSON.stringify(food_items);
 }
 
 
@@ -164,7 +157,8 @@ module.exports = {
 	async execute(interaction) {
 		const hall = interaction.options.getString("dining_hall");
 		const meal = interaction.options.getString("meal");
-		await interaction.reply(get_meal(hall, meal));
+		//console.log(get_meal(hall, meal));
+		await interaction.reply(JSON.stringify(get_meal(hall, meal)));
 
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
 	}
