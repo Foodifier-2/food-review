@@ -15,18 +15,11 @@ const DIVIDERS = ['-- Soups --', '-- Breakfast --', '-- Grill --', '-- Entrees -
 // (eg if cereal is first divider found, then the dh is not open for that meal)
 const EMOJIS = { 'veggie': '🥦', 'vegan': '🌱', 'halal': '🍖', 'eggs': '🥚', 'beef': '🐮', 'milk': '🥛', 'fish': '🐟', 'alcohol': '🍷', 'gluten': '🍞', 'soy': '🫘', 'treenut': '🥥', 'sesame': '', 'pork': '🐷', 'shellfish': '🦐', 'nuts': '🥜' };
 
-const { SlashCommandBuilder } = require('discord.js');
-var JSSoup = require('jssoup').default;
-var needle = require('needle');
-//const puppeteer = require('puppeteer')
-const { execute } = require('../review/reviews');
-//const cheerio = require("cheerio");
+const { SlashCommandBuilder, Embed, EmbedBuilder } = require('discord.js');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
 var axios = require('axios');
-//const pretty = require('pretty');
-
 
 async function get_site_with_cookie(url, location_url) {
   console.log(url)
@@ -72,23 +65,24 @@ async function get_meal(college, meal) {
 	const dom = new JSDOM(response)
   	dom.window.document.querySelectorAll('tr').forEach((tr) => {
 		if (tr.querySelector('div.longmenucolmenucat')) {
-		// If current tr has a divider
-		//console.log(tr.querySelector('div.longmenucolmenucat'));
-		food_items[tr.querySelector('div.longmenucolmenucat').textContent] = null;
-		return; // go to next tr
-		}
-		if (tr.querySelector('div.longmenucoldispname')) {
-		// If current tr has a food item
-		let food = tr.querySelector('div.longmenucoldispname').textContent;
-		food_items[food] = []; // add food to dictionary
-		for (let img of tr.querySelectorAll('img')) {
-			// Iterate through dietary restrictions and get img src names
-			let diets = img.getAttribute('src').split('/')[1].split('.')[0];
-			food_items[food].push(diets);
-		}
-		}
+			// If current tr has a divider
+			//console.log(tr.querySelector('div.longmenucolmenucat'));
+			food_items[tr.querySelector('div.longmenucolmenucat').textContent] = null;
+			return; // go to next tr
+			}
+			if (tr.querySelector('div.longmenucoldispname')) {
+			// If current tr has a food item
+			let food = tr.querySelector('div.longmenucoldispname').textContent;
+			food_items[food] = []; // add food to dictionary
+			for (let img of tr.querySelectorAll('img')) {
+				// Iterate through dietary restrictions and get img src names
+				let diets = img.getAttribute('src').split('/')[1].split('.')[0];
+				food_items[food].push(diets);
+			}
+			}
+		
   })
-  console.log(food_items)
+
     
 
   // for (const tr in $('tr')){
@@ -132,7 +126,8 @@ async function get_meal(college, meal) {
 	//             diets = img['src'].split('/')[1].split('.')[0] # parse them just in case i need them later
 	//
 	//             food_items[food.text].append(diets)
-  return "hi";
+	console.log(JSON.stringify(food_items));
+  return food_items;
 }
 
 
@@ -164,7 +159,31 @@ module.exports = {
 	async execute(interaction) {
 		const hall = interaction.options.getString("dining_hall");
 		const meal = interaction.options.getString("meal");
-		await interaction.reply(get_meal(hall, meal));
+
+		//console.log(get_meal(hall, meal));
+		let msg = '';
+		let food_items = await get_meal(hall, meal);
+		for (let food of Object.keys(food_items)) {
+			if (food.includes('-- ') && !DIVIDERS.includes(food)) {
+				break;
+			}
+			
+			if (!DIVIDERS.includes(food)) {
+				msg += food;
+				for (let diet_restriction of food_items[food]) {
+					console.log(diet_restriction);
+					msg += EMOJIS[diet_restriction] + '  ';
+				}
+				msg += '\n';
+			} else {
+				msg += food.replace('-- ', '**')
+				.replace(' --', '**') + '\n';
+			}
+		}
+		const embed = new EmbedBuilder()
+			.setColor(0x50C878)
+			.setDescription(msg);
+		await interaction.reply({ embeds: [embed] });
 
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
 	}
