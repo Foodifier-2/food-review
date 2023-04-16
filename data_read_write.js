@@ -27,15 +27,60 @@ function writeData(data, out_file) {
     return csvWriter.writeRecords(data);
 }
 
-
 async function getAllData(in_f) {
     const data = await readData(in_f);
     return data;
 }
 
+async function findByName(name, file) {
+    const data = await readData(file);
+    let reviews = []
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].name === name) {
+        reviews.append(data[i]);
+      }
+    }
+    return reviews;
+}
+
+async function findByFood(food, file) {
+    const data = await readData(file);
+    let reviews = []
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].food_item === food) {
+        reviews.append(data[i]);
+      }
+    }
+    return reviews;
+}
+
+async function sortRating(food, file, LH) {
+    const bsl = require('/sorting_algorithms/bubble');
+    const data = await readData(file);
+    
+    let reviews = []
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].food_item === food) {
+        reviews.append(data[i]);
+      }
+    }
+
+    if(LH === true){
+        reviews = bsl.bubbleSortLH(reviews);
+    }
+    else{
+        reviews = bsl.bubbleSortHL(reviews);
+    }
+
+    return reviews;
+}
+
 module.exports = {
     readData,
-    writeData
+    writeData,
+    findByName,
+    findByFood,
+    sortRating
 };
 
 //getAllData('user_reviews.csv').then((data) => console.log(data));

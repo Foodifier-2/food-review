@@ -1,12 +1,15 @@
 const { AttachmentBuilder, EmbedBuilder, SlashCommandBuilder  } = require('discord.js');
+const csv_rw = require('../../data_read_write');
+//const file = new AttachmentBuilder('../assets/discordjs.png');
 
-const file = new AttachmentBuilder('../assets/discordjs.png');
+const data = csv_rw.readData('user_reviews.csv');
 
 const exampleEmbed = new EmbedBuilder()
-	.setColor(0x0099FF)
-	.setTitle('Some title')
-	.setURL('https://discord.js.org/')
-	.setAuthor({ name: 'Some name', iconURL: 'https://i.imgur.com/AfFp7pu.png', url: 'https://discord.js.org' })
+	.setColor(0xedd100)
+	
+	//.setTitle('Some title')
+	//.setURL('https://discord.js.org/')
+	.setAuthor({ name: data[0]})
 	.setDescription('Some description here')
 	.setThumbnail('https://i.imgur.com/AfFp7pu.png')
 	.addFields(
@@ -34,7 +37,7 @@ module.exports = {
 					.setDescription('Sort')
 					.addChoices(
 						{ name: 'Highest Ratings', value: 'high' },
-						{ name: 'Lowest Ratings', value: 'old' },
+						{ name: 'Lowest Ratings', value: 'low' },
 						{ name: 'Newest', value: 'new' },
 						{ name: 'Oldest', value: 'old' }
 					)
