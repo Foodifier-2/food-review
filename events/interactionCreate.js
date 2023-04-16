@@ -7,7 +7,7 @@ module.exports = {
 			const command = interaction.client.commands.get(interaction.commandName);
 
 			if (!command) {
-				console.error(`No command matching ${interaction.commandName} was found.`);
+				console.error(`No execute command matching ${interaction.commandName} was found.`);
 				return;
 			}
 
@@ -23,7 +23,7 @@ module.exports = {
 			const command = interaction.client.commands.get(interaction.commandName);
 
 			if (!command) {
-				console.error(`No command matching ${interaction.commandName} was found.`);
+				console.error(`No autocomplete command matching ${interaction.commandName} was found.`);
 				return;
 			}
 

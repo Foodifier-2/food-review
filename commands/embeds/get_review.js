@@ -39,7 +39,7 @@ async function createSortedEmbed(food, file) {
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('get_review')
+		.setName('get_reviews')
 		.setDescription('Get the reviews for the specified menu item')
 		.addStringOption(option =>
 			option.setName('food_item')
