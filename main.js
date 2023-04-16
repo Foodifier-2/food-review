@@ -50,10 +50,10 @@ for (const folder of commandFolders) {
 client.login("MTA2NjI2OTQ0NzM1NjE2MjA2OQ.GyD25q.vlZ79XtsmS57SMvTywsXOz-LwPA-Q0olFb1ikQ");
 
 
-let data = csv_rw.readData('user_reviews.csv');
+//let data = csv_rw.readData('user_reviews.csv');
 //console.log(data)
-file = csv_rw.sortRating(
-	'allergen free halal chicken thigh',
-	'user_reviews.csv', false
-);
-console.log(file)
+// file = csv_rw.sortRating(
+// 	'allergen free halal chicken thigh',
+// 	'user_reviews.csv', false
+// );
+//console.log(file)

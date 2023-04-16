@@ -30,7 +30,7 @@ module.exports = {
 			.addStringOption(option =>
 				option.setName('food_item')
 					.setDescription('The UCSC food item to get reviews for this menu item.')
-					.setAutocomplete(true)
+					.setAutocomplete(false)
 					.setRequired(true))
 			.addStringOption(option =>
 				option.setName('sort_by')
@@ -41,23 +41,28 @@ module.exports = {
 						//{ name: 'Newest', value: 'new' },
 						//{ name: 'Oldest', value: 'old' }
 					)
+					.setAutocomplete(false)
 					.setRequired(true)),
 
 	async execute(interaction) {
-		let file = [];
+		let file = []
+		const a = "high";
+		const b = "low";
 		const sort_by = interaction.options.getString('sort_by');
 		const food_item = interaction.options.getString('food_item');
-		if(sort_by == 'high')
+		console.log(sort_by);
+		console.log(food_item)
+		if(a.localeCompare(sort_by))
 		{
 			file = await csv_rw.sortRating(
 				food_item,
 				'user_reviews.csv', false
 			);
-		} else if(sort_by == 'low') 
+		} else if(b.localeCompare(sort_by)) 
 		{
 			file = await csv_rw.sortRating(
 				food_item,
-				'user_reviews.csv', low
+				'user_reviews.csv', true
 			);
 		}
     console.log(file)
