@@ -22,7 +22,8 @@
     "puppeteer": "^19.9.0",
     "python-shell": "^5.0.0",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "sapphire": "^0.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
