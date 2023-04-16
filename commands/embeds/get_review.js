@@ -74,11 +74,9 @@ module.exports = {
 
 		const food_item = interaction.options.getString('food_item');
 
-		file = await csv_rw.findByFood(food_item, './user_reviews.csv');
- 
-		console.log(file)
-		const review_embed = await createSortedEmbed();
-		await interaction.reply({ embeds: [review_embed] });
+		reviews = await csv_rw.findByFood(food_item, './user_reviews.csv');
+	
+		await interaction.reply({ embeds: reviews });
 		console.log(`User ${interaction.user.tag} used command ${interaction}`);
 	},
 }

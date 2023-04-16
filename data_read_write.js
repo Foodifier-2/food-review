@@ -1,3 +1,5 @@
+const { EmbedBuilder } = require('discord.js');
+
 function readData(in_file) {
   const fs = require('fs');
   const csv = require('csv-parser');
@@ -50,8 +52,11 @@ async function findByFood(food, file) {
   for (let i = 0; i < data.length; i++) {
     
     if (data[i].food_item.localeCompare(food) == 0) {
-      console.log(data[i].food_item);
-      reviews.push(data[i]);
+      const embed = new EmbedBuilder()
+        .setAuthor({name: data[i].username + "#" + data[i].username.discriminator})
+        .setTitle(data[i].food_item)
+        .setDescription(`**Rating: ${data[i].rating}\nReview: ${data[i].review}**`)
+      reviews.push(embed);
     }
   }
   return reviews;
