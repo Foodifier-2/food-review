@@ -38,7 +38,7 @@ async function findByName(name, file) {
     for (let i = 0; i < data.length; i++) {
       console.log(data[i]);
       if (data[i].username == name) {
-        reviews.append(data[i]);
+        reviews.push(data[i]);
       }
     }
     return reviews;
@@ -49,7 +49,7 @@ async function findByFood(food, file) {
     let reviews = []
     for (let i = 0; i < data.length; i++) {
       if (data[i].food_item === food) {
-        reviews.append(data[i]);
+        reviews.push(data[i]);
       }
     }
     return reviews;
@@ -62,7 +62,7 @@ async function sortRating(food, file, LH) {
     let reviews = []
     for (let i = 0; i < data.length; i++) {
       if (data[i].food_item === food) {
-        reviews.append(data[i]);
+        reviews.push(data[i]);
       }
     }
 
