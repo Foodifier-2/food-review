@@ -171,7 +171,6 @@ module.exports = {
 			if (!DIVIDERS.includes(food)) {
 				msg += food;
 				for (let diet_restriction of food_items[food]) {
-					console.log(diet_restriction);
 					msg += EMOJIS[diet_restriction] + '  ';
 				}
 				msg += '\n';
